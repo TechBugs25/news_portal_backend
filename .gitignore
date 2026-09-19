@@ -1,0 +1,35 @@
+# Dependencies
+/node_modules
+
+# Build Output
+/dist
+/build
+
+# Environment files
+.env.local
+.env.*.local
+.env
+
+# Uploads & User data
+/uploads
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# OS & Editor files
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea
+
+# Test coverage
+/coverage
