@@ -22,3 +22,6 @@ When creating PRs:
 
 > For the full development process (planning, TDD, code review) before git operations,
 > see [development-workflow.md](common-development-workflow.md).
+
+## Push Policy
+- **ALWAYS ask for explicit user permission before running `git push`. Never push automatically without confirmation.**
