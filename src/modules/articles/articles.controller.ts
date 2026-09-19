@@ -94,6 +94,18 @@ export class ArticlesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.CHIEF_EDITOR, UserRole.REPORTER)
+  @Get('editorial/:id')
+  @ApiOperation({
+    summary:
+      'Editorial fetch for any article status by ID (Reporter/Editor/Admin)',
+  })
+  findOneEditorial(@Param('id') id: string) {
+    return this.articlesService.findOneBySlugOrId(id, false);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.CHIEF_EDITOR, UserRole.REPORTER)
   @Patch(':id')
   @ApiOperation({
     summary: 'Update article content/metadata (Reporter/Editor/Admin)',
