@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { PaginatedResult } from '../../common/dto/pagination.dto';
 import { ArticleStatus } from '../../common/enums/article-status.enum';
 import { UserRole } from '../../common/enums/user-role.enum';
@@ -380,6 +380,35 @@ export class ArticlesService {
 
     await this.articleRepository.remove(article);
     await this.invalidateArticleCaches();
+  }
+
+  async bulkRemove(ids: string[], user: User): Promise<{ count: number }> {
+    if (!ids || !ids.length) {
+      return { count: 0 };
+    }
+
+    const articles = await this.articleRepository.find({
+      where: { id: In(ids) },
+      relations: ['author'],
+    });
+
+    if (!articles.length) {
+      return { count: 0 };
+    }
+
+    if (user.role === UserRole.REPORTER) {
+      const unauthorized = articles.some((a) => a.author?.id !== user.id);
+      if (unauthorized) {
+        throw new ForbiddenException(
+          'Reporters can only delete their own articles',
+        );
+      }
+    }
+
+    await this.articleRepository.remove(articles);
+    await this.invalidateArticleCaches();
+
+    return { count: articles.length };
   }
 
   private async invalidateArticleCaches(): Promise<void> {

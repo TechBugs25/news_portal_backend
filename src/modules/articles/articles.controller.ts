@@ -137,6 +137,15 @@ export class ArticlesController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(UserRole.ADMIN, UserRole.CHIEF_EDITOR)
+  @Post('bulk-delete')
+  @ApiOperation({ summary: 'Bulk delete articles (Admin & Chief Editor)' })
+  bulkRemove(@Body('ids') ids: string[], @CurrentUser() user: User) {
+    return this.articlesService.bulkRemove(ids, user);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.CHIEF_EDITOR)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete article (Admin & Chief Editor)' })
   remove(@Param('id') id: string, @CurrentUser() user: User) {
